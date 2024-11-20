@@ -1,0 +1,21 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name     : root
+  namespace: argo-cd-staging
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io
+spec:
+  destination:
+    name     : in-cluster
+    namespace: argo-cd-staging
+  source:
+    path   : "staging/applications"
+    repoURL: "git@github.com:BohdanBohatov/argocd-keycloak.git"
+    targetRevision: HEAD
+  project: default
+  syncPolicy:
+    automated:
+      prune   : true
+      selfHeal: true
+      
