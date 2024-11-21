@@ -6,16 +6,17 @@ metadata:
   finalizers:
   - resources-finalizer.argocd.argoproj.io
 spec:
+  project: default
   destination:
     name     : in-cluster
-    namespace: argocd
+    namespace: efs-2
   source:
-    path   : "staging/applications"
+    path   : "HelmCharts/efscharts/efs"
     repoURL: "git@github.com:BohdanBohatov/argocd-keycloak.git"
     targetRevision: HEAD
-  project: default
   syncPolicy:
     automated:
       prune   : true
       selfHeal: true
-      
+    syncOption:
+      - CreateNamespace=true
