@@ -1,0 +1,47 @@
+## Storage must be created before and proper values placed here
+## This is done becouse if use helm destroy for one customer - it will destroy all StorageClasses which are used bu multiple keycloak users
+
+generalStorageClass:
+  storageName: keycloak-user-3-storage
+  provisioner: kubernetes.io/no-provisioner
+
+efsStorage:
+  storageName: efs-sc
+  provisioner: efs.csi.aws.com
+
+namespace: "keycloak-user-3-ns"
+
+## @param generalPersistentVolume used for storing keycloak data
+##
+generalPersistentVolume:
+  ## @param generalPersistentVolume.name must be unic for the whole cluster
+  ##
+  name: keycloak-general-pv-user-3
+  ## @param generalPersistentVolume.capacity - must be the same that in keycloak, could be increased 
+  ##
+  capacity: 8Gi
+  hostPath: "/mnt/data/keycloak/user-4"
+
+## @param efsPersistentVolume - used for provisioning efs storage
+##
+efsPersistentVolume:
+  ## @param efsPersistentVolume.name must be unic for the whole cluster
+  ##
+  name: keycloak-efs-pv-user-3
+  capacity: 1Gi
+  ## @param efsPersistentVolume.volumeHandle - EFS the same for each keycloak customer, 
+  ## way unic for each customer to avoid sharing the same files, 
+  ## ATTENTION folder must be created before provisioning
+  ##
+  volumeHandle: fs-0db109d8bea20374f:/keycloak/user-3-themes
+
+## @param efsPersistentVolumeClaim - used in keycloak helm template
+##
+efsPersistentVolumeClaim:
+  name: keycloak-pv-claim
+  requestStorage: 1Gi
+
+tlsCertificate:
+  name: "keycloak-production"
+  server: "https://acme-v02.api.letsencrypt.org/directory"
+  email: "bbohatovmif@gmail.com"

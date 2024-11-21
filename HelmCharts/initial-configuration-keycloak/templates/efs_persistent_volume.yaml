@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: {{ .Values.efsPersistentVolume.name  }} 
+spec:
+  storageClassName: {{ .Values.efsStorage.storageName }}
+  capacity:
+    storage:  {{ default "10Gi" .Values.efsPersistentVolume.capacity }} 
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  volumeMode: Filesystem
+  csi:
+    driver: {{ .Values.efsStorage.provisioner }}
+    volumeHandle: {{ .Values.efsPersistentVolume.volumeHandle }}

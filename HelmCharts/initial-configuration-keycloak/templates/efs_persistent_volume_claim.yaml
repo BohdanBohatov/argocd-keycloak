@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name:  {{ .Values.efsPersistentVolumeClaim.name }}
+  namespace: {{  required "Error: Namespace must be provided" ( .Values.namespace ) }}
+spec:
+  storageClassName: {{ .Values.efsStorage.storageName }}
+  accessModes:
+  - ReadWriteMany
+  resources:
+    requests:
+      storage: {{ .Values.efsPersistentVolumeClaim.requestStorage }}
