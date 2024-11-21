@@ -11,7 +11,7 @@ spec:
     name     : in-cluster
     namespace: test-ns
   source:
-    path   : "HelmCharts/Configuration"
+    path   : "Configuration"
     repoURL: "git@github.com:BohdanBohatov/argocd-keycloak.git"
     targetRevision: HEAD
   syncPolicy:
