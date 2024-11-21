@@ -42,7 +42,8 @@ efsPersistentVolumeClaim:
   requestStorage: 1Gi
 
 tlsCertificate:
-  name: "keycloak-production"
+  name: "keycloak-staging"
   server: "https://acme-v02.api.letsencrypt.org/directory"
   email: "bbohatovmif@gmail.com"
   ingressClass: nginx
+  privateKeyName: prod-secret-key

@@ -7,9 +7,9 @@ spec:
   acme:
     server: {{ .Values.tlsCertificate.server }}
     email: {{ .Values.tlsCertificate.email }}
-    privateKeySecretRef: {{ .Values.tlsCertificate.secretName }}
-      name: 
+    privateKeySecretRef:
+      name: {{ .Values.tlsCertificate.secretName }}
     solvers:
     - http01:
         ingress:
-          class: {{.Values.tlsCertificate.ingressClass }}
+          class: {{ .Values.tlsCertificate.ingressClass }}
