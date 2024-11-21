@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name     : keycloak-user-3-preconfig
+  name     : efs-storageclass-app
   namespace: argocd
   finalizers:
   - resources-finalizer.argocd.argoproj.io
@@ -9,14 +9,11 @@ spec:
   project: default
   destination:
     name     : in-cluster
-    namespace: keycloak-user-3-ns
+    namespace: default
   source:
-    path   : "HelmCharts/initial-configuration-keycloak"
+    path   : "Configuration/storageclass"
     repoURL: "git@github.com:BohdanBohatov/argocd-keycloak.git"
     targetRevision: HEAD
-    helm:
-      valueFiles:
-      - values_preconfig_keycloak_user_3.yaml
   syncPolicy:
     automated:
       prune   : true
