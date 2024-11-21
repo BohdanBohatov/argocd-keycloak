@@ -8,7 +8,7 @@ spec:
     server: {{ .Values.tlsCertificate.server }}
     email: {{ .Values.tlsCertificate.email }}
     privateKeySecretRef:
-      name: {{ .Values.tlsCertificate.secretName }}
+      name: {{ .Values.tlsCertificate.privateKeyName }}
     solvers:
     - http01:
         ingress:
