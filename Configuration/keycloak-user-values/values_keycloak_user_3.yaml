@@ -1,0 +1,51 @@
+#helm template keycloak-app-{user-} bitnami/keycloak --version 24.0.4 --namespace {} -f values-keycloak.yaml  > tmp.yaml
+#helm create keycloak-app-{user-3} bitnami/keycloak --version 24.0.4 --namespace {} -f values-keycloak.yaml
+#helm upgrade keycloak-app-user-3 bitnami/keycloak --version 24.0.4 --namespace keycloak-user-3-ns -f values-keycloak.yaml
+
+##DONT USE NAMESPACE IN VALUES - IT DOESN`T WORK, DATABASE WORKS IN ANOTHER NAMESPACE
+
+
+global:
+  defaultStorageClass: keycloak-user-3-storage
+
+extraVolumes:
+  - name: efs-storage
+    persistentVolumeClaim:
+      claimName: keycloak-pv-claim
+
+extraVolumeMounts:
+    - name: efs-storage
+      mountPath: /opt/bitnami/keycloak/themes
+
+auth:
+  adminUser: user
+  adminPassword: PaP$w0R}|{0PeC
+
+postgresql:
+  volumePermissions:
+    enabled: true
+  auth:
+    password: "9t3tggid47"
+    postgresPassword: "12345pass"
+    username: "db_user"
+
+ingress:
+  enabled: true
+  ingressClassName: nginx
+  hostname: "alphabetagamazeta.site"
+  tls: true
+  annotations: 
+    "cert-manager.io/issuer" : "keycloak-production"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+    nginx.org/server-snippets: |
+         location / {
+            proxy_set_header X-Forwarded-For $host;
+            proxy_set_header X-Forwarded-Proto $scheme;
+            proxy_set_header X-Forwarded-Host $host;
+            proxy_set_header X-Forwarded-Server $host;
+            proxy_set_header X-Forwarded-Port $server_port;
+            proxy_set_header X-Forwarded-Proto  $scheme;
+          }
+
+proxy: "edge"
