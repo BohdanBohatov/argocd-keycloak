@@ -46,7 +46,7 @@ spec:
             hostname: "alphabetagamazeta.site"
             tls: true
             annotations: 
-              "cert-manager.io/issuer" : "keycloak-production"
+              "cert-manager.io/issuer" : "keycloak-staging"
               nginx.ingress.kubernetes.io/ssl-redirect: "true"
               nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
               nginx.org/server-snippets: |
