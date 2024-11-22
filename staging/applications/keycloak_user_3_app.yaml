@@ -16,7 +16,7 @@ spec:
     targetRevision: 24.1.0 
     helm:
       valueFiles:
-      - /../../Configuration/keycloak-user-values/values_keycloak_user_3.yaml
+      - Configuration/keycloak-user-values/values_keycloak_user_3.yaml
   syncPolicy:
     automated:
       prune   : true
