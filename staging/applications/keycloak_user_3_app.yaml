@@ -11,8 +11,8 @@ spec:
     name     : in-cluster
     namespace: keycloak-user-3-ns
   source:
-    repoURL: "https://charts.bitnami.com/bitnami/"
-    chart: "keycloak"
+    repoURL: https://charts.bitnami.com/bitnami/
+    chart: keycloak
     targetRevision: 24.2.1
     helm:
       valueFiles:
