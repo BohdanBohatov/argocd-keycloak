@@ -13,7 +13,7 @@ spec:
   source:
     repoURL: https://charts.bitnami.com/bitnami/
     chart: keycloak
-    targetRevision: 24.2.1
+    targetRevision: 24.1.0 
     helm:
       valueFiles:
       - Configuration/keycloak-user-values/values_keycloak_user_3.yaml
