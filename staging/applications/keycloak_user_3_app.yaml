@@ -1,0 +1,20 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name     : keycloak-user-3
+  namespace: argocd
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  destination:
+    name     : in-cluster
+    namespace: keycloak-user-3-ns
+  source:
+    repoURL:  "git@github.com:BohdanBohatov/argocd-keycloak.git"
+    path: Configuration/keycloak-user-values
+    targetRevision: HEAD
+  syncPolicy:
+    automated:
+      prune   : true
+      selfHeal: true
