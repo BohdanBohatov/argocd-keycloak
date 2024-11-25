@@ -1,0 +1,63 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name     : "${APPLICATION_NAME}"
+  namespace: argocd
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  destination:
+    name     : in-cluster
+    namespace: "${NAMESPACE}"
+  source:
+    repoURL: registry-1.docker.io/bitnamicharts
+    chart: keycloak
+    targetRevision: "${KEYCLOAK_CHART_VERSION}"
+    helm:
+      valuesObject:
+          global:
+            defaultStorageClass: "${DEFAULT_STORAGE_CLASS}"
+          extraVolumes:
+            - name: efs-storage
+              persistentVolumeClaim:
+                claimName: "${EFS_PVC_NAME}"
+          extraVolumeMounts:
+              - name: efs-storage
+                mountPath: /opt/bitnami/keycloak/themes
+          auth:
+            adminUser: "${ADMIN_USER_NAME}"
+            adminPassword: "${ADMIN_USER_PASSWORD}"
+          postgresql:
+            volumePermissions:
+              enabled: true
+            auth:
+              password: "${POSTGRES_USER_PASSWORD}"
+              postgresPassword: "${POSTGRES_PASSWORD}"
+              username: "${POSTGRES_USER_NAME}"
+          ingress:
+            enabled: true
+            ingressClassName: nginx
+            hostname: "${HOSTNAME}"
+            tls: true
+            annotations: 
+              cert-manager.io/issuer: "${TLS_ISSUER_NAME}"
+              nginx.ingress.kubernetes.io/ssl-redirect: "true"
+              nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+              nginx.org/server-snippets: |
+                  location / {
+                      proxy_set_header X-Forwarded-For $host;
+                      proxy_set_header X-Forwarded-Proto $scheme;
+                      proxy_set_header X-Forwarded-Host $host;
+                      proxy_set_header X-Forwarded-Server $host;
+                      proxy_set_header X-Forwarded-Port $server_port;
+                      proxy_set_header X-Forwarded-Proto  $scheme;
+                    }
+          proxy: "edge"
+
+  syncPolicy:
+    automated:
+      prune   : true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

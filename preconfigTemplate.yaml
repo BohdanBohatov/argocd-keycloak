@@ -1,0 +1,52 @@
+## @param namespace place where the chart will be stored
+#
+namespace: "${NAMESPACE}"
+
+## @param generalStorageClass responsible for creating persistance volume which will be used in keycloak mounting
+# this value in system in persistanceVolume
+generalStorageClass:
+  storageName: "${DEFAULT_STORAGE_CLASS}"
+  provisioner: kubernetes.io/no-provisioner
+
+## @param generalPersistentVolume used for storing keycloak data
+##
+generalPersistentVolume:
+  ## @param generalPersistentVolume.name must be unic for the whole cluster
+  ##
+  name: "${PERSISTENT_VOLUME_NAME}"
+  ## @param generalPersistentVolume.capacity - must be the same that in keycloak, could be increased 
+  ##
+  capacity: 8Gi
+  hostPath: "${USER_VOLUME_PATH}"
+
+## @param efsStorage must be linked to existing storageClass
+#
+efsStorage:
+  storageName: "${EFS_STORAGECLASS_NAME}"
+  provisioner: efs.csi.aws.com
+
+## @param efsPersistentVolume - used for provisioning efs storage
+##
+efsPersistentVolume:
+  ## @param efsPersistentVolume.name must be unic for the whole cluster
+  ##
+  name: "${EFS_VOLUME_NAME}"
+  capacity: 1Gi
+  ## @param efsPersistentVolume.volumeHandle - EFS the same for each keycloak customer, 
+  ## way unic for each customer to avoid sharing the same files, 
+  ## ATTENTION folder must be created before provisioning
+  ##
+  volumeHandle: "${EFS_ID}:${EFS_USER_PATH}"
+
+## @param efsPersistentVolumeClaim 
+##
+efsPersistentVolumeClaim:
+  name: "${EFS_PVC_NAME}"
+  requestStorage: 1Gi
+
+tlsCertificate:
+  name: "${TLS_ISSUER_NAME}"
+  server: "https://acme-v02.api.letsencrypt.org/directory"
+  email: "bbohatovmif@gmail.com"
+  ingressClass: nginx
+  privateKeyName: prod-secret-key
