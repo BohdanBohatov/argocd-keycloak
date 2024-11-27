@@ -1,9 +1,5 @@
 #! /bin/bash
 
-### TODO 
-###   update script to use existing SEALED SECRETS
-
-
 #This script receives information from client, and generates configuration yaml files, which executes by argo-cd in git repository.
 #Server must have installed kubeseal to generate secrets for passwords https://github.com/bitnami-labs/sealed-secrets?tab=readme-ov-file#kubeseal
 
@@ -42,7 +38,6 @@ export POSTGRES_USER_PASSWORD=$(echo -ne "9t3tggid47" | base64) #need to generat
 export POSTGRES_PASSWORD=$(echo -ne "12345pass" | base64) #need to generate and store in some volume
 export POSTGRES_SECRET_NAME="keycloak-postgresql-$COMPANY-secret"
 export KEYCLOAK_SECRET_NAME="keycloak-app-$COMPANY-secret"
-
 
 export TLS_ISSUER_NAME="keycloak-staging"
 export HOSTNAME="alphabetagamazeta.site"

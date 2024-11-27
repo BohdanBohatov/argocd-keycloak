@@ -27,14 +27,16 @@ spec:
                 mountPath: /opt/bitnami/keycloak/themes
           auth:
             adminUser: "${ADMIN_USER_NAME}"
-            adminPassword: "${ADMIN_USER_PASSWORD}"
+            existingSecret: "${KEYCLOAK_SECRET_NAME}"
+            passwordSecretKey: admin-password
           postgresql:
             volumePermissions:
               enabled: true
             auth:
-              password: "${POSTGRES_USER_PASSWORD}"
-              postgresPassword: "${POSTGRES_PASSWORD}"
               username: "${POSTGRES_USER_NAME}"
+              existingSecret: "{POSTGRES_SECRET_NAME}"
+              secretKeys: 
+                userPasswordKey: password
           ingress:
             enabled: true
             ingressClassName: nginx
