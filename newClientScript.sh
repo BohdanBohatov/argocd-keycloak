@@ -51,9 +51,9 @@ export PRECONFIG_VALUES_FILE="preconfig_values_$COMPANY.yaml"
 envsubst < secret_template.yaml > secret_$COMPANY.yaml
 kubeseal -f secret_$COMPANY.yaml -w sealed_secret_$COMPANY.yaml
 
-export CUSTOM_USER_SEALED_PASSWORD=$(awk '/^    password:/ {print $2}' sealed-secret.yaml)
-export POSTGRES_SEALED_PASSWORD=$(awk '/^    postgres-password:/ {print $2}' sealed-secret.yaml)
-export ADMIN_SEALED_PASSWORD=$(awk '/^    admin-password:/ {print $2}' sealed-secret.yaml)
+export CUSTOM_USER_SEALED_PASSWORD=$(awk '/^    password:/ {print $2}' sealed_secret_$COMPANY.yaml)
+export POSTGRES_SEALED_PASSWORD=$(awk '/^    postgres-password:/ {print $2}' sealed_secret_$COMPANY.yaml)
+export ADMIN_SEALED_PASSWORD=$(awk '/^    admin-password:/ {print $2}' sealed_secret_$COMPANY.yaml)
 
 #Create yaml files which are configureation of new client.
 envsubst < preconfig_values_template.yaml > $PRECONFIG_VALUES_FILE
@@ -61,7 +61,7 @@ envsubst < preconfing_app_template.yaml > preconfig_app_$COMPANY.yaml
 envsubst < client_app_template.yaml > company_$COMPANY.yaml
 
 #Move generated files to specific folder. 
-mv $PRECONFIG_VALUES_FILE./HelmCharts/initial-configuration-keycloak/CompaniesValues
+mv $PRECONFIG_VALUES_FILE ./HelmCharts/initial-configuration-keycloak/CompaniesValues
 mv preconfig_app_$COMPANY.yaml ./staging/applications
 mv company_$COMPANY.yaml ./staging/applications
 
