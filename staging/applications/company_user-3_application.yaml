@@ -37,7 +37,7 @@ spec:
               enabled: true
             auth:
               username: "db_user"
-              existingSecret: "{POSTGRES_SECRET_NAME}"
+              existingSecret: keycloak-postgresql-user-3-secret
               secretKeys: 
                 userPasswordKey: password
           ingress:
