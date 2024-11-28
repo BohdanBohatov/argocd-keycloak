@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name     : "${APPLICATION_NAME}"
+  name     : "${PRECONFIG_APPLICATION_NAME}"
   namespace: argocd
   finalizers:
   - resources-finalizer.argocd.argoproj.io
@@ -16,7 +16,7 @@ spec:
     targetRevision: HEAD
     helm:
       valueFiles:
-      - "./Companies/${PRECONFIG_APP_FILE}"
+      - "./CompaniesValues/${PRECONFIG_VALUES_FILE}"
   syncPolicy:
     automated:
       prune   : true

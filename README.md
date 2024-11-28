@@ -1,8 +1,8 @@
-When terraform creates basic infrastructure need create "root" application
+When terraform creates basic infrastructure need create "root" application, and run it using "kubectl apply -f root-app.yaml
+All "kind: Application" must situated in the same namespace that root application
 
-Need to add for each resource to manage it through helm
-  annotations:
-    meta.helm.sh/release-name: RELEASE_NAME
-    meta.helm.sh/release-namespace: ACTUALL_NAMESPACE
-  labels:
-    app.kubernetes.io/managed-by: Helm
+
+Problems to solve:
+  1. Cleaning storage efs and general if user is deleted.
+  2. Create domain name for each user, create A record in Route53 by terraform. Run terraform with this script.
+  3. Creating folder with user themes by script in EFS storage  

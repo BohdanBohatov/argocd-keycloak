@@ -46,7 +46,17 @@ efsPersistentVolumeClaim:
 
 tlsCertificate:
   name: "${TLS_ISSUER_NAME}"
-  server: "https://acme-v02.api.letsencrypt.org/directory"
+  server: "https://acme-staging-v02.api.letsencrypt.org/directory" #"https://acme-v02.api.letsencrypt.org/directory"
   email: "bbohatovmif@gmail.com"
   ingressClass: nginx
   privateKeyName: prod-secret-key
+
+sealedSecret:
+  postgresSecretName: "${POSTGRES_SECRET_NAME}"
+  keycloakSecretName: "${KEYCLOAK_SECRET_NAME}"
+  instanceLabel: "${APPLICATION_NAME}"
+  adminSealedPassword: "${ADMIN_SEALED_PASSWORD}"
+  customUserSealedPassword: "${CUSTOM_USER_SEALED_PASSWORD}"
+  postgresSealedPassword: "${POSTGRES_SEALED_PASSWORD}"
+
+
