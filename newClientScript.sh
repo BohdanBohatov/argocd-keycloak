@@ -17,6 +17,7 @@ if ! [[ "$1" =~ $regex2 ]]; then
   exit 1
 fi
 
+export ENV_SIGN="$"
 export KEYCLOAK_CHART_VERSION=24.1.0
 export COMPANY=${1// /_} #replace spaces to dashes for company name
 
@@ -57,13 +58,13 @@ export ADMIN_SEALED_PASSWORD=$(awk '/^    admin-password:/ {print $2}' sealed_se
 
 #Create yaml files which are configureation of new client.
 envsubst < preconfig_values_template.yaml > $PRECONFIG_VALUES_FILE
-envsubst < preconfing_app_template.yaml > preconfig_app_$COMPANY.yaml
-envsubst < client_app_template.yaml > company_$COMPANY.yaml
+envsubst < preconfing_app_template.yaml > preconfig_$COMPANY\_application.yaml
+envsubst < client_app_template.yaml > company_$COMPANY\_application.yaml
 
 #Move generated files to specific folder. 
 mv $PRECONFIG_VALUES_FILE ./HelmCharts/initial-configuration-keycloak/CompaniesValues
-mv preconfig_app_$COMPANY.yaml ./staging/applications
-mv company_$COMPANY.yaml ./staging/applications
+mv preconfig_$COMPANY\_application.yaml ./staging/applications
+mv company_$COMPANY\_application.yaml ./staging/applications
 
 
 #Delete secret file, sealed secret file exit in custom helm chart
