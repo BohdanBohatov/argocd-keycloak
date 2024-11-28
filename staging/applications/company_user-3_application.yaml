@@ -6,9 +6,6 @@ metadata:
   finalizers:
   - resources-finalizer.argocd.argoproj.io
 spec:
-  metadata:
-    annotations:
-      argocd.argoproj.io/depends-on: "keycloak-user-3-preconfig-application"
   project: default
   destination:
     name     : in-cluster

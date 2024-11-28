@@ -6,9 +6,6 @@ metadata:
   finalizers:
   - resources-finalizer.argocd.argoproj.io
 spec:
-  metadata:
-    annotations:
-      argocd.argoproj.io/depends-on: "${PRECONFIG_APPLICATION_NAME}"
   project: default
   destination:
     name     : in-cluster
