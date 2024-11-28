@@ -1,0 +1,68 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name     : "keycloak-user-3-application"
+  namespace: argocd
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io
+spec:
+  metadata:
+    annotations:
+      argocd.argoproj.io/depends-on: "keycloak-user-3-preconfig-application"
+  project: default
+  destination:
+    name     : in-cluster
+    namespace: "user-3-ns"
+  source:
+    repoURL: registry-1.docker.io/bitnamicharts
+    chart: keycloak
+    targetRevision: "24.1.0"
+    helm:
+      valuesObject:
+          global:
+            defaultStorageClass: "keycloak-storage-class"
+          extraVolumes:
+            - name: efs-storage
+              persistentVolumeClaim:
+                claimName: "keycloak-pv-claim"
+          extraVolumeMounts:
+              - name: efs-storage
+                mountPath: /opt/bitnami/keycloak/themes
+          auth:
+            adminUser: "user"
+            existingSecret: "keycloak-app-user-3-secret"
+            passwordSecretKey: admin-password
+          postgresql:
+            volumePermissions:
+              enabled: true
+            auth:
+              username: "db_user"
+              existingSecret: "{POSTGRES_SECRET_NAME}"
+              secretKeys: 
+                userPasswordKey: password
+          ingress:
+            enabled: true
+            ingressClassName: nginx
+            hostname: "user-1.alphabetagamazeta.site"
+            tls: true
+            annotations: 
+              cert-manager.io/issuer: "keycloak-staging"
+              nginx.ingress.kubernetes.io/ssl-redirect: "true"
+              nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+              nginx.org/server-snippets: |
+                  location / {
+                      proxy_set_header X-Forwarded-For $host;
+                      proxy_set_header X-Forwarded-Proto $scheme;
+                      proxy_set_header X-Forwarded-Host $host;
+                      proxy_set_header X-Forwarded-Server $host;
+                      proxy_set_header X-Forwarded-Port $server_port;
+                      proxy_set_header X-Forwarded-Proto  $scheme;
+                    }
+          proxy: "edge"
+
+  syncPolicy:
+    automated:
+      prune   : true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

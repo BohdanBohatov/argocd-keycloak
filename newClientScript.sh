@@ -71,11 +71,9 @@ mv company_$COMPANY\_application.yaml ./staging/applications
 rm secret_$COMPANY.yaml 
 rm sealed_secret_$COMPANY.yaml
 
-#not redy exit 
-exit 0
+git pull 
+git add . 
+git commit -m "Added new company $COMPANY"
+git push
 
-
-#git pull 
-#git add . 
-#git commit -m "Added new company $COMPANY"
-#git push
+echo "Added new company $COMPANY"

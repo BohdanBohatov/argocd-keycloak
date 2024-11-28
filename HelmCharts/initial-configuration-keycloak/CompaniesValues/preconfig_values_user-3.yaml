@@ -1,0 +1,62 @@
+## @param namespace place where the chart will be stored
+#
+namespace: "user-3-ns"
+
+## @param generalStorageClass responsible for creating persistance volume which will be used in keycloak mounting
+# this value in system in persistanceVolume
+generalStorageClass:
+  storageName: "keycloak-storage-class"
+  provisioner: kubernetes.io/no-provisioner
+
+## @param generalPersistentVolume used for storing keycloak data
+##
+generalPersistentVolume:
+  ## @param generalPersistentVolume.name must be unic for the whole cluster
+  ##
+  name: "keycloak-general-pv-user-3"
+  ## @param generalPersistentVolume.capacity - must be the same that in keycloak, could be increased 
+  ##
+  capacity: 8Gi
+  hostPath: "/mnt/data/keycloak/user-4"
+
+## @param efsStorage must be linked to existing storageClass
+#
+efsStorage:
+  storageName: "efs-sc"
+  provisioner: efs.csi.aws.com
+
+## @param efsPersistentVolume - used for provisioning efs storage
+##
+efsPersistentVolume:
+  ## @param efsPersistentVolume.name must be unic for the whole cluster
+  ##
+  name: "keycloak-efs-pv-user-3"
+  capacity: 1Gi
+  ## @param efsPersistentVolume.volumeHandle - EFS the same for each keycloak customer, 
+  ## way unic for each customer to avoid sharing the same files, 
+  ## ATTENTION folder must be created before provisioning
+  ##
+  volumeHandle: "fs-0db109d8bea20374f:/keycloak/user-3-themes"
+
+## @param efsPersistentVolumeClaim 
+##
+efsPersistentVolumeClaim:
+  name: "keycloak-pv-claim"
+  requestStorage: 1Gi
+
+tlsCertificate:
+  name: "keycloak-staging"
+  server: "https://acme-staging-v02.api.letsencrypt.org/directory" #"https://acme-v02.api.letsencrypt.org/directory"
+  email: "bbohatovmif@gmail.com"
+  ingressClass: nginx
+  privateKeyName: prod-secret-key
+
+sealedSecret:
+  postgresSecretName: "keycloak-postgresql-user-3-secret"
+  keycloakSecretName: "keycloak-app-user-3-secret"
+  instanceLabel: "keycloak-user-3-application"
+  adminSealedPassword: "AgBXDgAknTNftadyQWPTiFFFH/y6wZ1BWKGmnxVRySrmoD6yHy6n+n3M/K0l4dLLqwxw/k1qOCP//d889mVkimEv0QmkI+rC9TifQTRXUm5dTDVIpOHzcW7JAgLIWn3F/fVJS/nhucCi5tadnRCm5udR3oLAD5bxb1DMBHpVK7xxmfXPqbmQtnZy9UafqPMb1IDl5PusgMnnLn9bGD11GKtC1V7rp3DnuLlxEnKtHmRtW511REkX74axLAS0CO+MQEKQ5X5TI+KLf5LfjI5gwEvggaYHQTAoW2VcFF6hQNqVG2qxg3Hp2YnNkQfiWubU121FRa5cINxeD6uwXFp2zvoWpX8UmP/GsiRdRsor+VIdDrB4m++OoPR+Ri7cztErdt9PBh99ra4uOLKA10NNbhtmnKHj0ozxVGDqVGJGx7MRFpWt92HC/9e3j2MIIxq3iPnoCfUVaVybUD0dOE7e3G2bbvE7ugrl6WBbxRnbmzi6pwUiMrVKrJBPOs0re9BxtLjnUMSfmF/sK0BYzXpg7TyMLavgITlNNTuElDKUnlvSY/frucow+A4y3MYX+0cBbbmsN+VJjv8ABcjgyHYydsPkrXM+W3H6GERY8ZpxN/zZ5jT4uyKGmDd4JDv40FfRi3Wpz2BO/rXZFN/ZwQgefaBFkYbhwXRndnCNnIuMcYfXI+nqCgv2OvtHNCUmdiPsygTTdT0XFGv3vcI/lJgXsA=="
+  customUserSealedPassword: "AgBBAOqp8MakrjlW35KcKCOVgdA1jx5EGr2hQiiCtRztvPo2hzBx0RG3/YEjePelBz/CjP5AquCe3KHego09xWMDmx8o9bu3P6CMwCk6R9RMrFzXqZ3gVASoP/fbZ/KOFjWZoLoFjTUFBMTNsdtC7es1VI/ziacrHZ0GWvV917rQMo0JuHUzXjmOBFYGj/EZVzJBH+iYvDUpMFPrI1+yNGMf+yGodxwrijg+UWhRr/3IbepvIqd8Bw94bgRJAAFRo10iny11XUnQXvitSESNdlVl9fyFpeyMyQ9/peWSVWbwVTuErINqQCsOTasU8xewy/rCAX6+YAoV11NdSlF9D1gnm8j2H5eC88DKQkAuf8Kv1CrJmZLjgPza3t/tWs/Wh8XRt0Stm1sg1vj58RHPetndCg6QLBVHitIGL2T4WGOF7qOVy8YEEswhDRBEzaj/DUXyZIRnAV2AAiu2eS1EiaMUImW9E2paefnPDxk5cTlZRLJ9zInC5Xli7mqPBrBOT40ZyT2Ma6KCUaH1+4Pg9WrIWMQJRUhLlLBldrx+i5X2WwORFUToDz0Mxq75pEHLdDps+qYJmirPWaT6dIb/uWWah3rlU30KYzPrpSw68113qNeMNL5b+H6fiEmZG/VUQDz/YnonwYYF3wJfMNXkU277SFtOBLIDSTvXbrZnQTpDyxg+xk0fCOnu4bYhZLqrybCqZZ6AxqjLHKXi"
+  postgresSealedPassword: "AgAlHXClgy4llvl9wZo8kAH0qJB3Yq3SdSZaAYSaAL7USpKw0QS/183BjfwWxshq546Xkp81oHmlZ/WmA2M41ndJSand3HdfwParIX+jl8kRtYE5/WD7yJQ96tIS1SNFoUYno9r0NMu0yASDViL+RAbF1ISMwEazIXfG/pCQNYPgAQPyTOdx6p5zMtZaUOIe2+pBpsKu7ORVwdQcWKI0j4rBVBUTQlTTxLqBTHof8Z7HsIqc32ulpAsP8nqXpA6MGx3fMNoXeYhWwGbp0fmFMS8vrQkF/QBqGVmjiziqvCUXeyP0/18ybyGLSXu7NIa2PYBYOfoREjwcuxsosWkKZDDriTvqSv90qQnl8hUEdyKJjZq40JIs/gW3KaZXz9ea+uvsVd2qmeohqGFumj+4EGFWs48wsA1CvHhuZGmXZbcO0AtKLubMhM5G+yDJrw0Uqn1kLMBy7AaHFrKUNmhiYFUOJmmNB8knKa9sQ9tlVDF1hfxEsyZeg9er2O9DBQAJwOfATQ5i072n5GpqjlrOEiKkesruqkSTCZIGDYN+vrh4/cR0GpCFF2ghLJi4pIUidqWmth7HelRwpkkph7BeCkaVYGCv33SobL+9oErbidWmucWjqcvDmQzZF/hMnDZsiKDSl67lBT1QOkw5u5JrW38yN67PkIJVDQLak7yH8zFPk0eDDgmWd0ttGAS8E3Dc8xS8detjW7kS1+g="
+
+
