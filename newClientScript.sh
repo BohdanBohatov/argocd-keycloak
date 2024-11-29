@@ -25,26 +25,26 @@ export PRECONFIG_APPLICATION_NAME="keycloak-$COMPANY-preconfig-application"
 export APPLICATION_NAME="keycloak-$COMPANY-application"
 export NAMESPACE="$COMPANY-ns"
 
-export DEFAULT_STORAGE_CLASS="keycloak-storage-class" #need to be generated, value without namespace for whole system must be uniq
+export DEFAULT_STORAGE_CLASS="keycloak-$COMPANY-storage-class"
 export PERSISTENT_VOLUME_NAME="keycloak-general-pv-$COMPANY"
-export USER_VOLUME_PATH="/mnt/data/keycloak/user-4"   #"/mnt/data/keycloak/$COMPANY" #must be uniq for each user, this folder contains themes
+export USER_VOLUME_PATH="/mnt/data/keycloak/$COMPANY" #TODO CREATE backups for this folder. IF user is deleted need clear this folder. 
 
 export EFS_STORAGECLASS_NAME="efs-sc" #static need to be changed if storageclass is changed
 export EFS_PVC_NAME="keycloak-pv-claim"
 export EFS_VOLUME_NAME="keycloak-efs-pv-$COMPANY"
-export EFS_ID=$2   #"fs-0db109d8bea20374f"
-export EFS_USER_PATH="/keycloak/user-3-themes" #this path must be created before provisioning
+export EFS_ID=$2
+export EFS_USER_PATH="/keycloak/user-3-themes" #this path must be created before provisioning, folder contains themes. TODO backup folders with themes.
 
 export ADMIN_USER_NAME="user"
-export ADMIN_USER_PASSWORD=$(echo -ne "PaP\$w0R}|{0PeC" | base64)
+export ADMIN_USER_PASSWORD=$(pwgen -cnys 10 1 | base64)
 export POSTGRES_USER_NAME="db_user"
-export POSTGRES_USER_PASSWORD=$(echo -ne "9t3tggid47" | base64) #need to generate and store in some place
-export POSTGRES_PASSWORD=$(echo -ne "12345pass" | base64) #need to generate and store in some volume
+export POSTGRES_USER_PASSWORD=$(pwgen -cnys 10 1 | base64)
+export POSTGRES_PASSWORD=$(pwgen -cnys 10 1 | base64)
 export POSTGRES_SECRET_NAME="keycloak-postgresql-$COMPANY-secret"
 export KEYCLOAK_SECRET_NAME="keycloak-app-$COMPANY-secret"
 
 export TLS_ISSUER_NAME="keycloak-staging"
-export HOSTNAME="user-1.alphabetagamazeta.site"
+export HOSTNAME="$COMPANY.alphabetagamazeta.site"
 
 export PRECONFIG_VALUES_FILE="preconfig_values_$COMPANY.yaml"
 
