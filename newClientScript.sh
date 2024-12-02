@@ -35,11 +35,15 @@ export EFS_VOLUME_NAME="keycloak-efs-pv-$COMPANY"
 export EFS_ID=$2
 export EFS_USER_PATH="/keycloak/user-3-themes" #this path must be created before provisioning, folder contains themes. TODO backup folders with themes.
 
+AD_USER_PASSWORD=$(pwgen -cnys 10 1)
+PS_USR_PASSWORD=$(pwgen -cnys 10 1)
+PS_PASSWORD=$(pwgen -cnys 10 1)
+
+export ADMIN_USER_PASSWORD=$(echo -n $AD_USER_PASSWORD| base64)
+export POSTGRES_USER_PASSWORD=$(echo -n $PS_USR_PASSWORD | base64)
+export POSTGRES_PASSWORD=$(echo -n $PS_PASSWORD | base64)
 export ADMIN_USER_NAME="user"
-export ADMIN_USER_PASSWORD=$(echo -n $(pwgen -cnys 10 1) | base64)
 export POSTGRES_USER_NAME="db_user"
-export POSTGRES_USER_PASSWORD=$(echo -n $(pwgen -cnys 10 1) | base64)
-export POSTGRES_PASSWORD=$(echo -n $(pwgen -cnys 10 1) | base64)
 export POSTGRES_SECRET_NAME="keycloak-postgresql-$COMPANY-secret"
 export KEYCLOAK_SECRET_NAME="keycloak-app-$COMPANY-secret"
 
