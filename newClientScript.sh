@@ -19,7 +19,7 @@ fi
 
 export ENV_SIGN="$"
 export KEYCLOAK_CHART_VERSION=24.1.0
-export COMPANY=${1// /_} #replace spaces to dashes for company name
+export COMPANY=${1// /-} #replace spaces to dashes for company name
 
 export PRECONFIG_APPLICATION_NAME="keycloak-$COMPANY-preconfig-application"
 export APPLICATION_NAME="keycloak-$COMPANY-application"
