@@ -5,8 +5,8 @@
 
 set -e 
 
-if [ $# -lt 2 ]; then
-    echo "Script requires: company name as a first argument; elastic file storage ID as a second argument; "
+if [ $# -lt 1 ]; then
+    echo "Script requires: company name as a first argument"
     exit 1
 fi
 
@@ -32,7 +32,7 @@ export USER_VOLUME_PATH="/mnt/data/keycloak/$COMPANY" #TODO CREATE backups for t
 export EFS_STORAGECLASS_NAME="efs-sc" #static need to be changed if storageclass is changed
 export EFS_PVC_NAME="keycloak-pv-claim"
 export EFS_VOLUME_NAME="keycloak-efs-pv-$COMPANY"
-export EFS_ID=$2
+export EFS_ID="fs-0db109d8bea20374f"
 export EFS_USER_PATH="/keycloak/user-3-themes" #this path must be created before provisioning, folder contains themes. TODO backup folders with themes.
 
 AD_USER_PASSWORD=$(pwgen -cnys 10 1)
